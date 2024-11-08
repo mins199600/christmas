@@ -45,11 +45,25 @@ public class MemberService {
     //회원 수 카운팅(ID 중복체크)
     // @param loginId - UK
     // @return 회원 수
-    public int countMemberByLoginId(final String loginId){
+    public int checkId(final String loginId){
         log.info("countMemberByLoginId: {} 실행됐다.", loginId);
-        int result = memberMapper.countByLoginId(loginId);
+        int result = memberMapper.checkMemberById(loginId);
         log.info("조회 결과: {}", result);
         return result;
+    }
+
+    //로그인
+    //1. 회원 정보 및 비밀번호 조회
+    public MemberResponse login(String loginId, String password){
+        MemberResponse member = findMemberByLoginId(loginId);
+        String encodedPassword = (member == null) ? "" : member.getPassword();
+        //2. 회원 정보 및 비밀번호 체크
+        if (member == null || !passwordEncoder.matches(password, encodedPassword)) {
+            return null;
+        }
+        //3. 회원 응답 객체에서 비밀번호를 제거한 후 회원정보 를 리턴 >> 왜냐면 시큐리티를 사용해서 암호화된 비밀번호를 쓰니깐 입력한 비밀번호가 필요가 없어서 삭제 한다는말
+        member.clearPassword();
+        return member;
     }
 }
 

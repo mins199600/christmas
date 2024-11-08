@@ -43,7 +43,7 @@
         member_practice
         WHERE
         delete_yn = 0
-        AND login_id = #{value}
+        AND login_id = #{loginId}
     </select>
 
     <!-- 회원 정보 수정 -->
@@ -74,7 +74,7 @@
 
 
     <!-- 회원 수 카운팅 (ID 중복 체크) -->
-    <select id="countByLoginId" parameterType="string" resultType="int">
+    <select id="checkMemberById" parameterType="string" resultType="int">
         SELECT
             COUNT(*)
         FROM
